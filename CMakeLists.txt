@@ -48,7 +48,7 @@ set(PLUGIN_SOURCES
 )
 add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${PLUGIN_SOURCES})  
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
-target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
+target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
 target_include_directories(${PROJECT_NAME} PRIVATE include)  
 
 # When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
