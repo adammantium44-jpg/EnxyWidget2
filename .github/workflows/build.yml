@@ -20,11 +20,11 @@ jobs:
       run: |  
         dir "%VCPKG_INSTALLATION_ROOT%\installed"  
 
-    - name: Setup vcpkg  
+    - name: Setup local vcpkg  
+      shell: cmd  
       run: |  
-        # VCPKG_INSTALLATION_ROOT sudah tersedia di runner windows-2022  
-        echo "vcpkg root is at %VCPKG_INSTALLATION_ROOT%"  
-        # Jika perlu update, lakukan di sini, jika tidak, lewatkan saja.  
+        git clone https://github.com/microsoft/vcpkg.git  
+        .\vcpkg\bootstrap-vcpkg.bat    
 
     # CACHE
     - name: Cache vcpkg
@@ -45,7 +45,7 @@ jobs:
         "%VCPKG_INSTALLATION_ROOT%\vcpkg.exe" install --triplet x64-windows-static  
         cmake -B build -S . -G "Ninja" ^  
           -DCMAKE_BUILD_TYPE=Release ^  
-          -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake ^  
+          -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake ^  
           -DVCPKG_MANIFEST_MODE=ON  
         cmake --build build --config Release   --parallel 4
     - name: Upload DLL
