@@ -15,6 +15,11 @@ jobs:
 
     - uses: lukka/get-cmake@latest
 
+    - name: List installed packages  
+      shell: cmd  
+      run: |  
+        dir "%VCPKG_INSTALLATION_ROOT%\installed"  
+
     - name: Setup vcpkg  
       run: |  
         # VCPKG_INSTALLATION_ROOT sudah tersedia di runner windows-2022  
@@ -33,10 +38,6 @@ jobs:
           C:/vcpkg/buildtrees
         key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
 
-    - name: Clean
-      shell: cmd
-      run: |
-        if exist build rmdir /s /q build
     - name: Configure and Build  
       shell: cmd  
       run: |  
