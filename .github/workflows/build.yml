@@ -15,17 +15,16 @@ jobs:
 
     - uses: lukka/get-cmake@latest
 
-    - name: List installed packages  
-      shell: cmd  
-      run: |  
-        dir "%VCPKG_INSTALLATION_ROOT%\installed"  
-
     - name: Setup local vcpkg  
       shell: cmd  
       run: |  
         git clone https://github.com/microsoft/vcpkg.git  
-        .\vcpkg\bootstrap-vcpkg.bat    
+        .\vcpkg\bootstrap-vcpkg.bat 
 
+    - name: List installed packages  
+      shell: cmd  
+      run: |  
+        dir "%VCPKG_INSTALLATION_ROOT%\installed"     
     # CACHE
     - name: Cache vcpkg
       uses: actions/cache@v4
