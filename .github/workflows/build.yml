@@ -1,38 +1,30 @@
 name: Build EnxyAbilities
 
 on:  
-  push:  
-  workflow_dispatch:
+push:  
+workflow_dispatch:
 
 jobs:  
   build:  
     runs-on: windows-2022  
-    env:  
-      VCPKG_ROOT: ${{ github.workspace }}/vcpkg/  
-      # Gunakan vcpkg.json yang ada di root repo Anda  
     steps:  
       - uses: actions/checkout@v4
 
-      - name: Run vcpkg  
+      - name: Setup vcpkg  
         uses: lukka/run-vcpkg@v11  
         with:  
           vcpkgJsonGlob: 'vcpkg.json'
 
       - name: Configure CMake  
-        uses: lukka/run-cmake@v10  
-        with:  
-          configurePreset: 'windows-default' # Pastikan Anda punya CMakePresets.json, atau gunakan command di bawah  
-          # Jika Anda tidak punya CMakePresets.json, gunakan baris bawah ini:  
-          configurePreset: ''  
-          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'  
-          useVcpkgToolchainFile: true  
-          buildDirectory: '${{ github.workspace }}/build'
+        shell: powershell  
+        run: |  
+          cmake -B build -S . -G "Ninja" `  
+          -DCMAKE_BUILD_TYPE=Release `  
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
 
       - name: Build  
-        uses: lukka/run-cmake@v10  
-        with:  
-          buildPreset: ''  
-          buildDirectory: '${{ github.workspace }}/build'
+        shell: powershell  
+        run: cmake --build build --config Release
 
       - name: Upload DLL  
         uses: actions/upload-artifact@v4  
