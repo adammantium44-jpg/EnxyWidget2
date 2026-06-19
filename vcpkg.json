@@ -1,6 +1,9 @@
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-    "dependencies": [
-        "commonlibsse-ng"
-    ]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "en-ini-editor",
+  "version-string": "0.1.0.0",
+  "dependencies": [
+    "commonlibsse-ng"
+  ]
+  "builtin-baseline": "9eae9f03f03e0ca96fce5031f44f4e64cd6debdc"
 }
