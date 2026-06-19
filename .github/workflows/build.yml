@@ -15,7 +15,11 @@ jobs:
 
     - uses: lukka/get-cmake@latest
 
-    - uses: lukka/run-vcpkg@v11
+    - name: Setup vcpkg  
+      run: |  
+        # VCPKG_INSTALLATION_ROOT sudah tersedia di runner windows-2022  
+        echo "vcpkg root is at %VCPKG_INSTALLATION_ROOT%"  
+        # Jika perlu update, lakukan di sini, jika tidak, lewatkan saja.  
 
     # CACHE
     - name: Cache vcpkg
