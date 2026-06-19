@@ -19,12 +19,7 @@ jobs:
       shell: cmd  
       run: |  
         git clone https://github.com/microsoft/vcpkg.git  
-        .\vcpkg\bootstrap-vcpkg.bat 
-
-    - name: List installed packages  
-      shell: cmd  
-      run: |  
-        dir "%VCPKG_INSTALLATION_ROOT%\installed"     
+        .\vcpkg\bootstrap-vcpkg.bat     
     # CACHE
     - name: Cache vcpkg
       uses: actions/cache@v4
