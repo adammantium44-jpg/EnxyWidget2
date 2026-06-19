@@ -39,7 +39,7 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
-find_package(CommonLibSSE CONFIG REQUIRED)
+find_package(CommonLibSSE-NG CONFIG REQUIRED)
 set(PLUGIN_SOURCES  
     src/Plugin.cpp  
     src/Ui.cpp  
