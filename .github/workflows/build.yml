@@ -1,4 +1,4 @@
-name: Build EnxyAbilities
+name: Build EnxyWidgets
 
 on:
   push:
@@ -32,16 +32,13 @@ jobs:
           C:/vcpkg/buildtrees
         key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
 
-    - name: Configure and Build  
+    - name: Build  
       shell: cmd  
       run: |  
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64  
-        "%VCPKG_INSTALLATION_ROOT%\vcpkg.exe" install --triplet x64-windows-static  
-        cmake -B build -S . -G "Ninja" ^  
-          -DCMAKE_BUILD_TYPE=Release ^  
-          -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake ^  
-          -DVCPKG_MANIFEST_MODE=ON  
-        cmake --build build --config Release   --parallel 4
+        .\vcpkg\vcpkg.exe install --triplet x64-windows  
+        cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_MANIFEST_MODE=ON  
+        cmake --build build --config Release --parallel 4
     - name: Upload DLL
       uses: actions/upload-artifact@v4
       with:
