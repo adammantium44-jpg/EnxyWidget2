@@ -37,23 +37,16 @@ jobs:
       shell: cmd
       run: |
         if exist build rmdir /s /q build
-    - name: Configure
-      shell: cmd
-      run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
-        cmake -B build ^
-        -S . ^
-        -G "Ninja" ^
-        -DCMAKE_BUILD_TYPE=Release ^
-        -DVCPKG_TARGET_TRIPLET=x64-windows-static ^
-        -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
-        -DVCPKG_MANIFEST_MODE=ON ^  
-        -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake
-        -DVCPKG_OVERLAY_REGISTRIES=""
-    - name: Build
-      shell: cmd
-      run: |
-        cmake --build build --config Release --parallel 4
+    - name: Configure and Build  
+      shell: cmd  
+      run: |  
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64  
+        "%VCPKG_INSTALLATION_ROOT%\vcpkg.exe" install --triplet x64-windows-static  
+        cmake -B build -S . -G "Ninja" ^  
+          -DCMAKE_BUILD_TYPE=Release ^  
+          -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake ^  
+          -DVCPKG_MANIFEST_MODE=ON  
+        cmake --build build --config Release   --parallel 4
     - name: Upload DLL
       uses: actions/upload-artifact@v4
       with:
