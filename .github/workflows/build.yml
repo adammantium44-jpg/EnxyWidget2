@@ -8,29 +8,34 @@ jobs:
   build:  
     runs-on: windows-2022  
     env:  
-      VCPKG_ROOT: ${{ github.workspace }}/vcpkg # Sesuaikan jika perlu
-
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg/  
+      # Gunakan vcpkg.json yang ada di root repo Anda  
     steps:  
-      - uses: actions/checkout@v4  
-      - uses: lukka/get-cmake@latest  
-      - uses: lukka/run-vcpkg@v11
+      - uses: actions/checkout@v4
 
-      # Cache hanya untuk vcpkg (bukan folder build)  
-      - name: Cache vcpkg artifacts  
-        uses: actions/cache@v4  
+      - name: Run vcpkg  
+        uses: lukka/run-vcpkg@v11  
         with:  
-          path: |  
-            ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}  
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}  
-          restore-keys: |  
-            ${{ runner.os }}-vcpkg-
+          vcpkgJsonGlob: 'vcpkg.json'
 
       - name: Configure CMake  
-        run: |  
-          cmake -B build -G Ninja ^  
-            -DCMAKE_BUILD_TYPE=Release ^  
-            -DVCPKG_TARGET_TRIPLET=x64-windows-static ^  
-            -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%/scripts/buildsystems/vcpkg.cmake  
-        
+        uses: lukka/run-cmake@v10  
+        with:  
+          configurePreset: 'windows-default' # Pastikan Anda punya CMakePresets.json, atau gunakan command di bawah  
+          # Jika Anda tidak punya CMakePresets.json, gunakan baris bawah ini:  
+          configurePreset: ''  
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'  
+          useVcpkgToolchainFile: true  
+          buildDirectory: '${{ github.workspace }}/build'
+
       - name: Build  
-        run: cmake --build build --config Release  
+        uses: lukka/run-cmake@v10  
+        with:  
+          buildPreset: ''  
+          buildDirectory: '${{ github.workspace }}/build'
+
+      - name: Upload DLL  
+        uses: actions/upload-artifact@v4  
+        with:  
+          name: EnxyAbilities  
+          path: build/**/*.dll  
