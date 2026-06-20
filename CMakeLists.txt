@@ -39,15 +39,7 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
-include(FetchContent)
-
-FetchContent_Declare(  
-  CommonLibSSE-NG  
-  GIT_REPOSITORY https://github.com/CharmedBaryon/CommonLibSSE-NG  
-  GIT_TAG        master # Atau versi rilis tertentu  
-)
-
-FetchContent_MakeAvailable(CommonLibSSE-NG)  
+find_package(CommonLibSSE REQUIRED) 
 set(PLUGIN_SOURCES  
     src/Plugin.cpp  
     src/Ui.cpp  
