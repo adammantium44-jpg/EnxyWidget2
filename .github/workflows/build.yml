@@ -1,37 +1,54 @@
-name: Build EnxyWidgets
+name: Build EnxyWidget
 
-on:  
-  push:  
+on:
+  push:
   workflow_dispatch:
 
-jobs:  
-  build:  
+jobs:
+  build:
     runs-on: windows-2022
 
-    steps:  
-      - name: Checkout code  
-        uses: actions/checkout@v4  
-        with:  
-          submodules: 'recursive'
+    steps:
+    - uses: actions/checkout@v4
 
-      - name: Setup CMake  
-        uses: lukka/get-cmake@latest
+    - uses: microsoft/setup-msbuild@v2
 
-      - name: Setup local vcpkg  
-        shell: cmd  
-        run: |  
-          if not exist vcpkg (git clone https://github.com/microsoft/vcpkg.git)  
-          if not exist .\vcpkg\vcpkg.exe (call .\vcpkg\bootstrap-vcpkg.bat)
+    - uses: lukka/get-cmake@latest
 
-      - name: Build  
-        shell: cmd  
-        run: |  
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64  
-          cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCommonLibSSE_DIR=%GITHUB_WORKSPACE%/external/CommonLibSSE-NG/cmake -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake  
-          cmake --build build --config Release --parallel 4
+    - uses: lukka/run-vcpkg@v11
 
-      - name: Upload DLL  
-        uses: actions/upload-artifact@v4  
-        with:  
-          name: EnxyWidgets  
-          path: build/**/*.dll  
+    # CACHE
+    - name: Cache vcpkg
+      uses: actions/cache@v4
+      with:
+        path: |
+          build
+          vcpkg_installed
+          C:/vcpkg/packages
+          C:/vcpkg/downloads
+          C:/vcpkg/buildtrees
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+
+    - name: Clean
+      shell: cmd
+      run: |
+        if exist build rmdir /s /q build
+    - name: Configure
+      shell: cmd
+      run: |
+        cmake -B build ^
+        -S . ^
+        -A x64 ^
+        -DCMAKE_BUILD_TYPE=Release ^
+        -DVCPKG_TARGET_TRIPLET=x64-windows-static ^
+        -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^
+        -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake
+    - name: Build
+      shell: cmd
+      run: |
+        cmake --build build --config Release
+    - name: Upload DLL
+      uses: actions/upload-artifact@v4
+      with:
+        name: EnxyWidget
+        path: build/**/*.dll
