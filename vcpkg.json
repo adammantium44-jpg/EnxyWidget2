@@ -4,6 +4,5 @@
   "version-string": "0.1.0.0",
   "dependencies": [
     "commonlibsse-ng"
-  ],
-  "builtin-baseline": "6fb127f7d425ae3cf3fab0f79005d907c885c0d8"
+  ]
 }

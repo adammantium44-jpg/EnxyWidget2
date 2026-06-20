@@ -34,11 +34,22 @@ jobs:
 
     - name: Build  
       shell: cmd  
-      run: |  
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64  
+      run: |   
+        set VCPKG_ROOT=   
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64   
+        cd vcpkg  
+        git fetch --all --tags  
+        git checkout master  
+        cd ..  
+          
+        :: Install dependencies  
         .\vcpkg\vcpkg.exe install --triplet x64-windows  
+          
+        :: Configure CMake dengan Ninja (Pastikan Ninja sudah terinstal di runner, biasanya ada. Jika tidak, pakai MSBuild)  
         cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_MANIFEST_MODE=ON  
-        cmake --build build --config Release --parallel 4
+          
+        :: Build  
+        cmake --build build --config Release  
     - name: Upload DLL
       uses: actions/upload-artifact@v4
       with:
