@@ -1,63 +1,54 @@
-name: Build EnxyWidget
+name: Build EnxyAbilities 
 
-on:
-  push:
-  workflow_dispatch:
+on: 
+  push: 
+  workflow_dispatch: 
 
-jobs:
-  build:
-    runs-on: windows-2022
+jobs: 
+  build: 
+    runs-on: windows-2022 
 
-    steps:
-    - uses: actions/checkout@v4
+    steps: 
+    - uses: actions/checkout@v4 
 
-    - uses: microsoft/setup-msbuild@v2
+    - uses: microsoft/setup-msbuild@v2 
 
-    - uses: lukka/get-cmake@latest
+    - uses: lukka/get-cmake@latest 
 
-    - uses: lukka/run-vcpkg@v11
+    - uses: lukka/run-vcpkg@v11 
 
-    # CACHE
-    - name: Cache vcpkg
-      uses: actions/cache@v4
-      with:
-        path: |
-          build
-          vcpkg_installed
-          C:/vcpkg/packages
-          C:/vcpkg/downloads
-          C:/vcpkg/buildtrees
-        key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+    # CACHE 
+    - name: Cache vcpkg 
+      uses: actions/cache@v4 
+      with: 
+        path: | 
+          build 
+          vcpkg_installed 
+          C:/vcpkg/packages 
+          C:/vcpkg/downloads 
+          C:/vcpkg/buildtrees 
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }} 
 
-    - name: Clean
-      shell: cmd
-      run: |
-        if exist build rmdir /s /q build
-    - name: Build  
-      shell: cmd  
-      env:  
-        # Hapus variabel yang bermasalah  
-        VCPKG_BINARY_SOURCES: ""  
-      run: |  
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64  
-          
-        :: Pastikan Ninja ada di path  
-        set PATH=%PATH%;C:\ProgramData\chocolatey\bin  
-          
-        :: Jika ninja belum ada, instal (opsional tapi aman)  
-        where ninja || choco install ninja -y
-
-        :: Setup VCPKG_ROOT  
-        set VCPKG_ROOT=%GITHUB_WORKSPACE%\vcpkg
-
-        :: Konfirmasi file berada di tempat yang benar  
-        dir CMakePresets.json  
-          
-        :: Jalankan konfigurasi  
-        cmake --preset=release  
-        cmake --build --build build/release    
-    - name: Upload DLL
-      uses: actions/upload-artifact@v4
-      with:
-        name: EnxyWidget
-        path: build/**/*.dll
+    - name: Clean 
+      shell: cmd 
+      run: | 
+        if exist build rmdir /s /q build 
+    - name: Configure 
+      shell: cmd 
+      run: | 
+        cmake -B build ^ 
+        -S . ^ 
+        -A x64 ^ 
+        -DCMAKE_BUILD_TYPE=Release ^ 
+        -DVCPKG_TARGET_TRIPLET=x64-windows-static ^ 
+        -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded ^ 
+        -DCMAKE_TOOLCHAIN_FILE=%VCPKG_INSTALLATION_ROOT%\scripts\buildsystems\vcpkg.cmake 
+    - name: Build 
+      shell: cmd 
+      run: | 
+        cmake --build build --config Release 
+    - name: Upload DLL 
+      uses: actions/upload-artifact@v4 
+      with: 
+        name: EnxyAbilities 
+        path: build/**/*.dll 
