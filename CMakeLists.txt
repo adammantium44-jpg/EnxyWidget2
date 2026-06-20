@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # [BEGIN set_project_name]
 # Set your project name. This will be the name of your SKSE .dll file.
-project(EnxyWidgets VERSION 1.0.0 LANGUAGES CXX)
+project(EnxyAbilities VERSION 1.0.0 LANGUAGES CXX)
 set(VCPKG_TARGET_TRIPLET "x64-windows-static-md")
 
 # [END set_project_name]
@@ -39,19 +39,10 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external/CommonLibSSE-NG")
-find_package(CommonLibSSE REQUIRED) 
-set(PLUGIN_SOURCES  
-    src/Plugin.cpp  
-    src/Ui.cpp  
-    src/Config.cpp  
-    src/Widget.cpp  
-)
-target_link_libraries(${PROJECT_NAME} PRIVATE CommonLibSSE-NG::CommonLibSSE-NG)  
-add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${PLUGIN_SOURCES})  
+find_package(CommonLibSSE CONFIG REQUIRED)
+add_commonlibsse_plugin(${PROJECT_NAME} SOURCES plugin.cpp) # <--- specifies plugin.cpp
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
-target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
-target_include_directories(${PROJECT_NAME} PRIVATE include)  
+target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
 
 # When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
 # Only works if you configure DEPLOY_ROOT above (or set the SKYRIM_MODS_FOLDER environment variable)
