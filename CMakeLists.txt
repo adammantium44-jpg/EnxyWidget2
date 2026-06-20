@@ -43,7 +43,7 @@ include(FetchContent)
 
 FetchContent_Declare(  
   CommonLibSSE-NG  
-  GIT_REPOSITORY https://github.com/alandtse/CommonLibSSE-NG  
+  GIT_REPOSITORY https://github.com/CharmedBaryon/CommonLibSSE-NG  
   GIT_TAG        master # Atau versi rilis tertentu  
 )
 
