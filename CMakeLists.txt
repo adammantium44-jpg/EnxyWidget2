@@ -39,6 +39,7 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external/CommonLibSSE-NG")
 find_package(CommonLibSSE REQUIRED) 
 set(PLUGIN_SOURCES  
     src/Plugin.cpp  
