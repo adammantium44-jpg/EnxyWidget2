@@ -36,12 +36,9 @@ jobs:
     - name: Build  
       shell: cmd  
       run: |  
-        :: Download manual sebagai fallback  
-        git clone https://github.com/CharmedBaryon/CommonLibSSE-NG D:/a/EnxyWidget2/EnxyWidget2/external/CommonLibSSE-NG
-
         :: Build  
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
-        cmake -B build -S . -G "Ninja" ^  
+        cmake -B build -S . -A X64 ^  
         -DCMAKE_BUILD_TYPE=Release ^  
         -DCommonLibSSE_DIR=D:/a/EnxyWidget2/EnxyWidget2/external/CommonLibSSE-NG/cmake ^  
         -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake  
