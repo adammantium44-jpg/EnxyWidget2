@@ -39,16 +39,16 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external/CommonLibSSE-NG")  
-find_package(CommonLibSSE CONFIG REQUIRED)
-add_commonlibsse_plugin(${PROJECT_NAME} SOURCES
-src/Plugin.cpp
-src/UI.cpp
-src/Widget.cpp
-src/Config.cpp
-) # <--- specifies plugin.cpp
-target_link_libraries(${PROJECT_NAME} PUBLIC CommonLibSSE::CommonLibSSE)
-target_include_directories(${PROJECT_NAME} PRIVATE include)  
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/external/CommonLibSSE-NG")
+find_package(CommonLibSSE REQUIRED) 
+set(PLUGIN_SOURCES  
+    src/Plugin.cpp  
+    src/Ui.cpp  
+    src/Config.cpp  
+    src/Widget.cpp  
+)
+target_link_libraries(${PROJECT_NAME} PRIVATE CommonLibSSE-NG::CommonLibSSE-NG)  
+add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${PLUGIN_SOURCES})  
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
 
