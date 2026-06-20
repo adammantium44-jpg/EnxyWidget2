@@ -36,7 +36,7 @@ jobs:
       shell: cmd  
       run: |  
         :: Download manual sebagai fallback  
-        git clone https://github.com/alandtse/CommonLibSSE-NG D:/a/EnxyWidget2/EnxyWidget2/external/CommonLibSSE-NG
+        git clone https://github.com/CharmedBaryon/CommonLibSSE-NG D:/a/EnxyWidget2/EnxyWidget2/external/CommonLibSSE-NG
 
         :: Build  
         cmake -B build -S . -G "Ninja" ^  
