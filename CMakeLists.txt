@@ -46,6 +46,7 @@ src/UI.cpp
 src/Widget.cpp
 src/Config.cpp
 ) # <--- specifies plugin.cpp
+target_include_directories(${PROJECT_NAME} PRIVATE include)  
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
 
