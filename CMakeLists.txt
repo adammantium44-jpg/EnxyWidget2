@@ -39,13 +39,22 @@ endif()
 # set(OUTPUT_FOLDER "C:/path/to/any/folder")
 
 # Setup your SKSE plugin as an SKSE plugin!
-find_package(CommonLibSSE CONFIG REQUIRED)
+include(FetchContent)
+
+FetchContent_Declare(  
+  CommonLibSSE-NG  
+  GIT_REPOSITORY https://github.com/alandtse/CommonLibSSE-NG  
+  GIT_TAG        master # Atau versi rilis tertentu  
+)
+
+FetchContent_MakeAvailable(CommonLibSSE-NG)  
 set(PLUGIN_SOURCES  
     src/Plugin.cpp  
     src/Ui.cpp  
     src/Config.cpp  
     src/Widget.cpp  
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE CommonLibSSE-NG::CommonLibSSE-NG)  
 add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${PLUGIN_SOURCES})  
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
 target_precompile_headers(${PROJECT_NAME} PRIVATE include/PCH.h) # <--- PCH.h is required!
